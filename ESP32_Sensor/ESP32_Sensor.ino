@@ -4,12 +4,9 @@
 
 #define SensorPin 34
 #define ButtonPin 35
-//#define LEDPin 26
-//#define SensorPower 25
 
 volatile int SampleCount = 0;
 volatile int count = 0;
-char buffer[3000];
 
 HTTPClient client;
 
@@ -17,11 +14,9 @@ HTTPClient client;
 //*********************************************
 const char* ssid = "elecom-58179b";
 const char* password = "cmp574fn3em4";
-//const String host ="8e522fd7.ngrok.io";
 const String host ="192.168.2.105";
 #define PORT 8000
 //*********************************************
-
 
 void setup() {  
   Serial.begin(115200); 
@@ -29,25 +24,19 @@ void setup() {
   
   pinMode(SensorPin, INPUT);
   pinMode(ButtonPin, INPUT);
-  //pinMode(LEDPin, OUTPUT);
-  //pinMode(SensorPower, OUTPUT);
   Serial.print("\n");
 
   HttpDisConnect();
   WiFiDisConnect();
 }
- 
+
 void loop() {
   
   int ButtonStatus = digitalRead(ButtonPin);
   SampleCount = 0;
   
   if (ButtonStatus == HIGH) {
-    //digitalWrite(LEDPin, HIGH);
-    //digitalWrite(SensorPower, HIGH);
     Serial.println("[ON ] Start Mesurement");
-    //Serial.println("Calibrating . . .");
-    //delay(30000);
 
     WiFiConnect();
     HttpConnect();
@@ -60,12 +49,10 @@ void loop() {
         break;
       }
       CreateJson();
-      delay(1000);
+      delay(1000);   //１件ごとの時間間隔を設定 (ms)
     }
    
   }else if (ButtonStatus == LOW){
-    //digitalWrite(LEDPin, LOW);
-    //digitalWrite(SensorPower, LOW);
     Serial.println("[OFF] Stop Mesurement");
     delay(5000);
   }
