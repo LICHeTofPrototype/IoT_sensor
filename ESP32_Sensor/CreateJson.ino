@@ -2,8 +2,9 @@
 #include <ArduinoJson.h>
 
 //***********************************
-int timeInterval = 50;  //ms
+int timeInterval = 50;  //測定間隔(ms)
 int arrayNum = 200;  //配列に入れる要素数
+char buffer[3000];  //バッファ strlen(buffer)で確認できる
 //arrayNum * 2 以上の数値をJSON_ARRAY_SIZE(**)に入れてね
 //***********************************
 
@@ -15,7 +16,8 @@ void CreateJson(){
   for(int i=1 ; i <= arrayNum; i++){
     SampleCount += timeInterval;
     int Signal = analogRead(SensorPin);  
-      
+
+    //timeとbeatの配列にデータを格納
     Time.add(SampleCount);
     Beat.add(Signal);
     
@@ -25,10 +27,11 @@ void CreateJson(){
   Serial.println("****************************");
   Serial.flush();
   
-  serializeJson(root, Serial);
+  serializeJson(root, Serial); //シリアルモニタにjsonを表示
   Serial.print("\n");
-  serializeJson(root, buffer, sizeof(buffer));
+  serializeJson(root, buffer, sizeof(buffer)); //バッファにjsonを格納
 
+  //POSTはここでしてる
   int postCode = client.POST((uint8_t *) buffer, strlen(buffer));
   
   if( postCode == 201 ){
@@ -44,6 +47,7 @@ void CreateJson(){
     Serial.println(postCode); 
   }
   
+  //GETはここでしてる
   int getCode = client.GET();
   
   if(getCode > 0){

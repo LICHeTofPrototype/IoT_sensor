@@ -12,7 +12,8 @@ void HttpConnect(){
   Serial.print("Requesting URL = ");
   Serial.println(url);
   Serial.print("\n");
-  
+
+  //urlにアクセス
   client.begin(url);
   client.addHeader("Content-Type", "application/json");
 }
