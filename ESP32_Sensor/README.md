@@ -13,7 +13,7 @@ https://www.switch-science.com/catalog/3210/
 ・PulseSensor  
 https://www.switch-science.com/catalog/1135/  
   
-・æ IDE (1.8.10)  
+・Arduino IDE (1.8.10)  
 https://www.arduino.cc/en/main/software  
   
 ・Library to install  
@@ -29,6 +29,7 @@ WiFiとの接続 WiFiConnect() ( WiFiConnect.ino ),
 サーバとの接続 HttpConnet() (HttpConnect.ino ),   
 センサデータをJson形式で生成しサーバへPOST CreateJson() ( CreateJson.ino ),  
 測定終了後, 各接続を解除.  
+測定開始 / 測定終了はボタンで行う  
   
   
 *************************************************  
