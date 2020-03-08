@@ -12,7 +12,8 @@ void CreateJson(){
   StaticJsonDocument<JSON_ARRAY_SIZE(400) + JSON_OBJECT_SIZE(2)> root;
   JsonArray Time = root.createNestedArray("time");
   JsonArray Beat = root.createNestedArray("beat");
-  
+
+  Serial.printf("---------------Elapsed time = %d [ms]---------------\n", SampleCount);
   for(int i=1 ; i <= arrayNum; i++){
     SampleCount += timeInterval;
     int Signal = analogRead(SensorPin);  
@@ -20,12 +21,9 @@ void CreateJson(){
     //timeとbeatの配列にデータを格納
     Time.add(SampleCount);
     Beat.add(Signal);
-    
+
     delay(timeInterval);
   }
-  
-  Serial.println("****************************");
-  Serial.flush();
   
   serializeJson(root, Serial); //シリアルモニタにjsonを表示
   Serial.print("\n");
@@ -39,7 +37,8 @@ void CreateJson(){
 
     DynamicJsonDocument json_response(255);
     deserializeJson(json_response, *resp);
-    
+
+    Serial.printf("   Response: ");  
     serializeJson(json_response, Serial);
     Serial.print("\n");
   }else{
@@ -52,12 +51,12 @@ void CreateJson(){
   
   if(getCode > 0){
       String httpResponse = client.getString();                   
-      Serial.printf("Response: %d", getCode);  
+      Serial.printf("   Response: %d", getCode);  
       Serial.println(httpResponse);  
     }else{
       Serial.print("[0  ] Error on sending GET: ");
       Serial.println(getCode);  
     }
-  
-  Serial.println("****************************");
+
+  Serial.flush();
 }
