@@ -13,7 +13,7 @@ void CreateJson(){
   JsonArray Time = root.createNestedArray("time");
   JsonArray Beat = root.createNestedArray("beat");
 
-  Serial.printf("---------------Elapsed time = %d [ms]---------------\n", SampleCount);
+  Serial.printf("--------------- Elapsed time = %d [ms] ---------------\n", SampleCount);
   for(int i=1 ; i <= arrayNum; i++){
     SampleCount += timeInterval;
     int Signal = analogRead(SensorPin);  
