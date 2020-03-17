@@ -8,5 +8,4 @@ void HttpConnect(){
 
 void HttpDisConnect(){  
   client.end();
-  Serial.println("[---] Http Disonnected");
 }
