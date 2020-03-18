@@ -4,8 +4,9 @@
 //***********************************
 //10ms, arrayNum = 1000のとき, MAX(strlen(buffer)) = 5028
 int timeInterval = 10;  //測定間隔(ms)
-int arrayNum = 1000;  //配列に入れる要素数
-char buffer[5050];  //バッファ strlen(buffer)で確認できる 
+int const arrayNum = 1000;  //配列に入れる要素数
+int const strNum = 29 + arrayNum * 4 + arrayNum - 1 + 100;
+char buffer[strNum];  //バッファ strlen(buffer)で確認できる 
 //***********************************
 
 void CreateJson(){
