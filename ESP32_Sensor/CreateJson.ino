@@ -1,26 +1,20 @@
 
 #include <ArduinoJson.h>
 
-
 //***********************************
-//10ms, arrayNum = 1000のとき, MAX(strlen(buffer)) = 4028
 int timeInterval = 10;  //測定間隔(ms)
-int arrayNum = 1000;  //配列に入れる要素数
-char buffer[5050];  //バッファ strlen(buffer)で確認できる 
-//unsigned char* buffer;
+const int arrayNum = 1000;  //配列に入れる要素数
+const int strNum = 29 + arrayNum*4 + arrayNum - 1 +  100;
+char buffer[strNum];
 //***********************************
-//int = arrayNum + 1;
 
 void CreateJson(){
 
-  //StaticJsonDocument<JSON_ARRAY_SIZE(5) + JSON_OBJECT_SIZE(1)> root;
-  //StaticJsonDocument<6002> root;
   DynamicJsonDocument root(20000);
   NowTime = time(NULL);
   timeInfo = localtime(&NowTime);
   sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
   root["time"] = CurrentTime;
-  //root["delta"] = timeInterval;
 
   JsonArray Beat = root.createNestedArray("beat");
   Serial.println("----------------------------------------------");

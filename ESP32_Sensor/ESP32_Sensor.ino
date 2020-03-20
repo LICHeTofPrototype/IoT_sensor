@@ -78,12 +78,15 @@ void loop() {
     digitalWrite(LEDPin, HIGH);
     
     WiFiConnect();
-
+    
+    NowTime = time(NULL);
+    timeInfo = localtime(&NowTime);
+    sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
+    
     while(1){
       int SensorPower = digitalRead(OnOffPin);
       if (SensorPower == LOW) {
         HttpDisConnect();
-        WiFiDisConnect();
         break;
       }
       HttpConnect();
@@ -98,7 +101,7 @@ void loop() {
     sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
     
     Serial.printf("[OFF] Stop Mesurement %s\n", CurrentTime);
-    delay(5000);
+    delay(3000);
   }
 
 }

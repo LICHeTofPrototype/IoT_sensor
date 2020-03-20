@@ -2,11 +2,10 @@
 #include <ArduinoJson.h>
 
 //***********************************
-//10ms, arrayNum = 1000のとき, MAX(strlen(buffer)) = 5028
 int timeInterval = 10;  //測定間隔(ms)
-int const arrayNum = 1000;  //配列に入れる要素数
-int const strNum = 29 + arrayNum * 4 + arrayNum - 1 + 100;
-char buffer[strNum];  //バッファ strlen(buffer)で確認できる 
+const int arrayNum = 1000;  //配列に入れる要素数
+const int strNum = 29 + arrayNum*4 + arrayNum - 1 +  100;
+char buffer[strNum];
 //***********************************
 
 void CreateJson(){
@@ -27,5 +26,6 @@ void CreateJson(){
 
   serializeJson(root, buffer, sizeof(buffer)); //バッファにjsonを格納
   int postCode = client.POST((uint8_t *) buffer, strlen(buffer));
+
   Serial.flush();
 }
