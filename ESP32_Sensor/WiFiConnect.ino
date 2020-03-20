@@ -29,8 +29,7 @@ void WiFiConnect(){
       digitalWrite(WiFiPin, HIGH);
       Serial.print("\n");
       Serial.println("[---] WiFi Connected");
-
-      configTime( JST, 0, "ntp.nict.jp", "ntp.jst.mfeed.ad.jp");
+      configTime( JST, 0, "ntp.nict.jp");
       break;
     }
   }

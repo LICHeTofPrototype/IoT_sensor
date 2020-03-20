@@ -43,12 +43,14 @@ void setup() {
   url += PORT;
   url += "/v1/api/calc_pnn/2/";
 
+  WiFiDisConnect();
   WiFiConnect();
 }
 
 void loop() {
 
   int SensorPower = digitalRead(OnOffPin);
+
   if (SensorPower == HIGH) {
     
     while (cal <= 20 ){
@@ -60,17 +62,19 @@ void loop() {
       delay(1000);
       cal += 1 ;
     }
-    
     cal = 0;
+
     digitalWrite(LEDPin, HIGH);
     
     WiFiConnect();
-
+    
+    NowTime = time(NULL);
+    timeInfo = localtime(&NowTime);
+    
     while(1){
       int SensorPower = digitalRead(OnOffPin);
       if (SensorPower == LOW) {
         HttpDisConnect();
-        WiFiDisConnect();
         break;
       }
       HttpConnect();
@@ -84,7 +88,7 @@ void loop() {
     timeInfo = localtime(&NowTime);  
     sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
     
-    delay(5000);
+    delay(3000);
   }
 
 }
