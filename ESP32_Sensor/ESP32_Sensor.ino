@@ -18,13 +18,27 @@ time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
 
+volatile int Signal;
+volatile int next = 0;
+
+volatile int P =1024;
+volatile int T = 2048;
+volatile int thresh = 1600;
+volatile int amp = 0;
+volatile int IBI = 600;
+int S = 1600;
+
+
+volatile unsigned long sampleCounter = 0;
+volatile unsigned long lastBeatTime = 0;
+
 HTTPClient client;
 
 //[Wi-Fi環境・サーバ]が変更される場合は以下を変更
 //*********************************************
 const char* ssid = "elecom-58179b";
 const char* password = "cmp574fn3em4";
-const String host ="192.168.2.111";
+const String host ="192.168.2.119";
 #define PORT 8000
 //*********************************************
 

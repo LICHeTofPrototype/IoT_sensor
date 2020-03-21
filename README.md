@@ -32,17 +32,36 @@ ArduinoJson ( by Benoit Blanchon) 6.14
   
 ### CreateJson.ino  
 <code>void CreateJson()</code>  
+* Buffer
 POSTするデータ数を変更する時は, timeInterval(測定時間幅)とarrayNum(要素数)を変更  
 arrayNumの値により, バッファの大きさが決まる
 ```php
 char buffer[strNum]   
 ```
 strNum = [括弧など] + [要素数*桁数] + [カンマの数] + [余分に]  
-
+  
+* Json
 Jsonの生成は以下のURL参照  
 https://arduinojson.org/v6/api/dynamicjsondocument/  
 https://arduinojson.org/v6/example/generator/  
+  
+* RC Filter
+```php
+void fuction(){
+Signal = 0.8 * S + 0.2 * analogRead(SensorPin);  
+// Any Process  
+S = Signal;  
+}  
+```  
 
+RCフィルタはアナログフィルタだが, 差分方程式を用いることで,  
+サンプリングした離散データに対して, 同様の特性を持つデジタルフィルタになる.  
+  
+$$ y[n] = ay[n-1] + (1-a)x[n] $$  
+$$ a = CR / (CR + T ) $$  
+$$ fc = 1 / 2πCR $$  
+  
+遮断周波数 $$ fc $$ , サンプリング周期 $$ T $$ , 電気容量 $$ C $$ , 抵抗値 $$ R $$ とした時, $
 
 ## How to use  
 1. 電源と接続  
