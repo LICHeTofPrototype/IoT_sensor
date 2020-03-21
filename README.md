@@ -48,20 +48,25 @@ https://arduinojson.org/v6/example/generator/
 * RC Filter
 ```php
 void fuction(){
-Signal = 0.8 * S + 0.2 * analogRead(SensorPin);  
-// Any Process  
-S = Signal;  
+　Signal = 0.8 * S + 0.2 * analogRead(SensorPin);  
+　// Any Process  
+　S = Signal;  
 }  
 ```  
 
 RCフィルタはアナログフィルタだが, 差分方程式を用いることで,  
 サンプリングした離散データに対して, 同様の特性を持つデジタルフィルタになる.  
   
-$$ y[n] = ay[n-1] + (1-a)x[n] $$  
-$$ a = CR / (CR + T ) $$  
-$$ fc = 1 / 2πCR $$  
+<code>y[n] = a*y[n-1] + (1-a)*x[n]</code>  
   
-遮断周波数 $$ fc $$ , サンプリング周期 $$ T $$ , 電気容量 $$ C $$ , 抵抗値 $$ R $$ とした時, $
+<code>a = CR / (CR + T )</code>  
+  
+<code>fc = 1 / 2πCR</code>  
+  
+遮断周波数 <code>fc</code> , サンプリング周期 <code>T</code>, 電気容量 <code>C</code>, 抵抗値 <code>R</code> とした時,  
+<code>T</code> はTimeInterval=10ms, 任意の値 <code>fc</code> を用いて, <code>a</code> を算出する.  
+  
+https://bluefish.orz.hm/sdoc/digifil2.html#RCフィルタ
 
 ## How to use  
 1. 電源と接続  
