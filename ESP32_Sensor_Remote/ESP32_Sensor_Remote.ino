@@ -18,13 +18,16 @@ time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
 
+volatile int Signal;
+int S = 1800;
+
 HTTPClient client;
 
 //[Wi-Fi環境・サーバ]が変更される場合は以下を変更
 //*********************************************
 const char* ssid = "elecom-58179b";
 const char* password = "cmp574fn3em4";
-const String host ="192.168.2.111";
+const String host ="192.168.2.119";
 #define PORT 8000
 //*********************************************
 

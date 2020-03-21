@@ -19,13 +19,15 @@ void CreateJson(){
   JsonArray Beat = root.createNestedArray("beat");
   
   for(int i=1 ; i <= arrayNum; i++){
-    int Signal = analogRead(SensorPin);  
+    Signal = 0.8 * S + 0.2 * analogRead(SensorPin);
     Beat.add(Signal);
+    S = Signal;
     delay(timeInterval);
   }
 
   serializeJson(root, buffer, sizeof(buffer)); //バッファにjsonを格納
   int postCode = client.POST((uint8_t *) buffer, strlen(buffer));
 
+  
   Serial.flush();
 }
