@@ -4,9 +4,10 @@
 //***********************************
 int timeInterval = 10;  //測定間隔(ms)
 const int arrayNum = 1000;  //配列に入れる要素数
+//***********************************
+
 const int strNum = 29 + arrayNum*4 + arrayNum - 1 +  100;
 char buffer[strNum];
-//***********************************
 
 void CreateJson(){
 
@@ -19,15 +20,18 @@ void CreateJson(){
   JsonArray Beat = root.createNestedArray("beat");
   
   for(int i=1 ; i <= arrayNum; i++){
+    //RCフィルタでノイズ除去
     Signal = 0.8 * S + 0.2 * analogRead(SensorPin);
     Beat.add(Signal);
     S = Signal;
     delay(timeInterval);
   }
 
-  serializeJson(root, buffer, sizeof(buffer)); //バッファにjsonを格納
-  int postCode = client.POST((uint8_t *) buffer, strlen(buffer));
-
-  
+  int SensorPower = digitalRead(OnOffPin);
+  if (SensorPower == HIGH){
+    serializeJson(root, buffer, sizeof(buffer)); //バッファにjsonを格納
+    int postCode = client.POST((uint8_t *) buffer, strlen(buffer));
+  }
+ 
   Serial.flush();
 }

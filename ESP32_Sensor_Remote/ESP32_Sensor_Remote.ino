@@ -91,7 +91,7 @@ void loop() {
     timeInfo = localtime(&NowTime);  
     sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
     
-    delay(3000);
+    delay(2000);
   }
 
 }
