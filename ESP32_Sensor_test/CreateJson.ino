@@ -17,6 +17,7 @@ void CreateJson(){
   sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
         
   root["time"] = CurrentTime;
+  root["dev_id"] = DeviceID;
   root["measurement_id"] = MeasurementID;
 
   JsonArray Beat = root.createNestedArray("beat");

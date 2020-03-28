@@ -20,6 +20,7 @@ String url_end = "";
 time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
+char CurrentDate[30];
 
 volatile int Signal;
 volatile int S =1800;
@@ -55,11 +56,6 @@ void setup() {
   url_start = url + "/measurement/start/";
   url_end = url + "/measurement/end/";
   url += "/calc_data/";
-
-  Serial.println(" ");
-  Serial.println(url_start);
-  Serial.println(url_end);
-  Serial.println(url);
   
   WiFiDisConnect();
   WiFiConnect();
@@ -86,6 +82,7 @@ void loop() {
 
     HttpConnectStart();
     StartPost();
+    HttpDisConnect();
 
     while(1){
       int SensorPower = digitalRead(OnOffPin);
