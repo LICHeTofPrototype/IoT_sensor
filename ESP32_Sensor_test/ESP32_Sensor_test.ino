@@ -12,25 +12,20 @@
 volatile int SampleCount = 0;
 volatile int count = 0;
 volatile int cal = 0;
+
 String url = "";
+String url_start = "";
+String url_end = "";
 
 time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
 
 volatile int Signal;
-volatile int next = 0;
+volatile int S =1800;
 
-volatile int P =1024;
-volatile int T = 2048;
-volatile int thresh = 1600;
-volatile int amp = 0;
-volatile int IBI = 600;
-int S = 1600;
-
-
-volatile unsigned long sampleCounter = 0;
-volatile unsigned long lastBeatTime = 0;
+volatile int MeasurementID;
+volatile int DeviceID = 92407 ;
 
 HTTPClient client;
 
@@ -55,27 +50,24 @@ void setup() {
   url += host;
   url += ":";
   url += PORT;
-  url += "/v1/api/calc_pnn/2/";
+  url += "/v1/api";
 
-  Serial.print("\n");
-  Serial.print("Requesting URL = ");
+  url_start = url + "/measurement/start/";
+  url_end = url + "/measurement/end/";
+  url += "/calc_data/";
+
+  Serial.println(" ");
+  Serial.println(url_start);
+  Serial.println(url_end);
   Serial.println(url);
-  Serial.print("\n");
-
-
+  
   WiFiDisConnect();
   WiFiConnect();
 }
 
 void loop() {
-
   int SensorPower = digitalRead(OnOffPin);
-
   if (SensorPower == HIGH) {
-    Serial.println("[ON ] Start Mesurement");
-
-    Serial.println("[!!!] Start Caliburation");
-    Serial.print("Caliburation Time [");
     
     while (cal <= 20 ){
       if (cal % 2 == 0){
@@ -84,27 +76,27 @@ void loop() {
         digitalWrite(LEDPin, HIGH);
       }
       delay(1000);
-      Serial.print("◼");
       cal += 1 ;
     }
     cal = 0;
-    Serial.print("]\n");
     digitalWrite(LEDPin, HIGH);
-    
-    WiFiConnect();
-    
+        
     NowTime = time(NULL);
     timeInfo = localtime(&NowTime);
-    sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
-    
+
+    HttpConnectStart();
+    StartPost();
+
     while(1){
       int SensorPower = digitalRead(OnOffPin);
-      if (SensorPower == LOW) {
+      
+      if (SensorPower == LOW) {     
         HttpDisConnect();
         break;
+      }else if (SensorPower == HIGH){
+        HttpConnect();
+        CreateJson();
       }
-      HttpConnect();
-      CreateJson();
     }
    
   }else if (SensorPower == LOW){
@@ -114,8 +106,7 @@ void loop() {
     timeInfo = localtime(&NowTime);  
     sprintf(CurrentTime, "%02d:%02d:%02d", timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
     
-    Serial.printf("[OFF] Stop Mesurement %s\n", CurrentTime);
-    delay(3000);
+    delay(2000);
   }
 
 }
