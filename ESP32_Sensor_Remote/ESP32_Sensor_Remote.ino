@@ -7,12 +7,16 @@
 #define LEDPin 26
 #define WiFiPin 13
 
+#define DeviceID DEV0092407
 #define JST 3600* 9
 
 volatile int SampleCount = 0;
 volatile int count = 0;
 volatile int cal = 0;
+
 String url = "";
+String url_start = "";
+String url_end = "";
 
 time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
@@ -44,8 +48,12 @@ void setup() {
   url += host;
   url += ":";
   url += PORT;
-  url += "/v1/api/calc_pnn/2/";
+  url += "/v1/api";
 
+  url_start = url + "/mesurement/start/";
+  url_end = url + "/mesurement/end/";
+  url += "/calc_pnn/";
+  
   WiFiDisConnect();
   WiFiConnect();
 }
@@ -73,10 +81,29 @@ void loop() {
     
     NowTime = time(NULL);
     timeInfo = localtime(&NowTime);
-    
+
+
+    //*************************************
+    //測定前にDeviceIDをPOSTする
+    HttpConnectStart();
+    int postCode = client.POST(DeviceID);
+
+    if( postCode == 200 ){
+      Serial.print("[---] Success on sending POST: ");
+      Serial.println(postCode); 
+      HttpDisConnect();
+    }else{
+      Serial.print("[***] Error on sending POST: ");
+      Serial.println(postCode);
+      HttpDisConnect();
+      return ; 
+    }
+    //*************************************
+
+
     while(1){
       int SensorPower = digitalRead(OnOffPin);
-      if (SensorPower == LOW) {
+      if (SensorPower == LOW) {        
         HttpDisConnect();
         break;
       }
