@@ -7,7 +7,6 @@
 #define LEDPin 26
 #define WiFiPin 13
 
-#define DeviceID DEV0092407
 #define JST 3600* 9
 
 volatile int SampleCount = 0;
@@ -21,9 +20,13 @@ String url_end = "";
 time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
+char CurrentDate[30];
 
 volatile int Signal;
-int S = 1800;
+volatile int S =1800;
+
+volatile int MeasurementID;
+volatile int DeviceID = 92407 ;
 
 HTTPClient client;
 
@@ -50,18 +53,16 @@ void setup() {
   url += PORT;
   url += "/v1/api";
 
-  url_start = url + "/mesurement/start/";
-  url_end = url + "/mesurement/end/";
-  url += "/calc_pnn/";
+  url_start = url + "/measurement/start/";
+  url_end = url + "/measurement/end/";
+  url += "/calc_data/";
   
   WiFiDisConnect();
   WiFiConnect();
 }
 
 void loop() {
-
   int SensorPower = digitalRead(OnOffPin);
-
   if (SensorPower == HIGH) {
     
     while (cal <= 20 ){
@@ -74,41 +75,25 @@ void loop() {
       cal += 1 ;
     }
     cal = 0;
-
     digitalWrite(LEDPin, HIGH);
-    
-    WiFiConnect();
-    
+        
     NowTime = time(NULL);
     timeInfo = localtime(&NowTime);
 
-
-    //*************************************
-    //測定前にDeviceIDをPOSTする
     HttpConnectStart();
-    int postCode = client.POST(DeviceID);
-
-    if( postCode == 200 ){
-      Serial.print("[---] Success on sending POST: ");
-      Serial.println(postCode); 
-      HttpDisConnect();
-    }else{
-      Serial.print("[***] Error on sending POST: ");
-      Serial.println(postCode);
-      HttpDisConnect();
-      return ; 
-    }
-    //*************************************
-
+    StartPost();
+    HttpDisConnect();
 
     while(1){
       int SensorPower = digitalRead(OnOffPin);
-      if (SensorPower == LOW) {        
+      
+      if (SensorPower == LOW) {     
         HttpDisConnect();
         break;
+      }else if (SensorPower == HIGH){
+        HttpConnect();
+        CreateJson();
       }
-      HttpConnect();
-      CreateJson();
     }
    
   }else if (SensorPower == LOW){
