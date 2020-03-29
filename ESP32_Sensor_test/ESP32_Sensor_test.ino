@@ -12,14 +12,21 @@
 volatile int SampleCount = 0;
 volatile int count = 0;
 volatile int cal = 0;
+
 String url = "";
+String url_start = "";
+String url_end = "";
 
 time_t NowTime;
 struct tm *timeInfo;  //時刻を格納するオブジェクト
 char CurrentTime[10];
+char CurrentDate[30];
 
 volatile int Signal;
-int S = 1800;
+volatile int S =1800;
+
+volatile int MeasurementID;
+volatile int DeviceID = 92407 ;
 
 HTTPClient client;
 
@@ -44,16 +51,18 @@ void setup() {
   url += host;
   url += ":";
   url += PORT;
-  url += "/v1/api/calc_pnn/2/";
+  url += "/v1/api";
 
+  url_start = url + "/measurement/start/";
+  url_end = url + "/measurement/end/";
+  url += "/calc_data/";
+  
   WiFiDisConnect();
   WiFiConnect();
 }
 
 void loop() {
-
   int SensorPower = digitalRead(OnOffPin);
-
   if (SensorPower == HIGH) {
     
     while (cal <= 20 ){
@@ -66,22 +75,25 @@ void loop() {
       cal += 1 ;
     }
     cal = 0;
-
     digitalWrite(LEDPin, HIGH);
-    
-    WiFiConnect();
-    
+        
     NowTime = time(NULL);
     timeInfo = localtime(&NowTime);
-    
+
+    HttpConnectStart();
+    StartPost();
+    HttpDisConnect();
+
     while(1){
       int SensorPower = digitalRead(OnOffPin);
-      if (SensorPower == LOW) {
+      
+      if (SensorPower == LOW) {     
         HttpDisConnect();
         break;
+      }else if (SensorPower == HIGH){
+        HttpConnect();
+        CreateJson();
       }
-      HttpConnect();
-      CreateJson();
     }
    
   }else if (SensorPower == LOW){
