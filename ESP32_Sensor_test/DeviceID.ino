@@ -1,8 +1,8 @@
 
 #include <ArduinoJson.h>
 
-char start_buffer[100];
-char end_buffer[100];
+char start_buffer[128];
+char end_buffer[128];
 
 void StartPost(){
   DynamicJsonDocument root(400);
@@ -13,6 +13,8 @@ void StartPost(){
   root["start_time"] = CurrentDate;
   root["dev_id"] = DeviceID;
 
+  serializeJson(root,Serial);
+  Serial.println(" ");
   serializeJson(root, start_buffer, sizeof(start_buffer));
   int postCode = client.POST((uint8_t *) start_buffer, strlen(start_buffer));
 
@@ -35,7 +37,9 @@ void EndPost(){
   root["end_time"] = CurrentDate;
   root["dev_id"] = DeviceID;
   root["measurement_id"] = MeasurementID;
-  
+
+  serializeJson(root,Serial);
+  Serial.println(" ");
   serializeJson(root, end_buffer, sizeof(end_buffer));
   int postCode = client.POST((uint8_t *) end_buffer, strlen(end_buffer));
 }
