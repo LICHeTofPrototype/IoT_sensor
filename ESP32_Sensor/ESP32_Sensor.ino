@@ -55,7 +55,7 @@ void setup() {
   url += host;
   url += ":";
   url += PORT;
-  url += "/v1/api/calc_pnn/2/";
+  url += "/v1/api/calc_data/";
 
   Serial.print("\n");
   Serial.print("Requesting URL = ");
