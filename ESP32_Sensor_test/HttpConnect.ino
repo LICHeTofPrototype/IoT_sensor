@@ -7,12 +7,12 @@ void HttpConnect(){
 }
 
 void HttpConnectStart(){
-  client.begin(url);
+  client.begin(url_start);
   client.addHeader("Content-Type", "application/json");
 }
 
 void HttpConnectEnd(){
-  client.begin(url);
+  client.begin(url_end);
   client.addHeader("Content-Type", "application/json");
 }
 
