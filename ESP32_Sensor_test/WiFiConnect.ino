@@ -16,9 +16,9 @@ void WiFiConnect(){
       if(count == 5){
         break;
       }else if (count % 2 == 0){
-        digitalWrite(WiFiPin, LOW);
+        digitalWrite(wifi_pin, LOW);
       }else {
-        digitalWrite(WiFiPin, HIGH);
+        digitalWrite(wifi_pin, HIGH);
       }
       delay(1000);
       count += 1;
@@ -26,7 +26,7 @@ void WiFiConnect(){
 
     if (WiFi.status() == WL_CONNECTED){
       Serial.println("[***] Success WiFiConnect");
-      digitalWrite(WiFiPin, HIGH);
+      digitalWrite(wifi_pin, HIGH);
       configTime( JST, 0, "ntp.nict.jp");
       break;
     }
@@ -38,5 +38,5 @@ void WiFiConnect(){
 void WiFiDisConnect() {
   WiFi.disconnect();
   Serial.println("[***] Success WiFiDisConnect");
-  digitalWrite(WiFiPin, LOW);
+  digitalWrite(wifi_pin, LOW);
 }
