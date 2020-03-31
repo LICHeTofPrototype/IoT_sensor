@@ -1,26 +1,31 @@
 
 #include <ArduinoJson.h>
 
-char start_buffer[100];
-char end_buffer[100];
+char start_buffer[128];
+char end_buffer[128];
 
 void StartPost(){
   DynamicJsonDocument root(400);
-  NowTime = time(NULL);
-  timeInfo = localtime(&NowTime);
-  sprintf(CurrentDate, "%04d-%02d-%02d %02d:%02d:%02d",timeInfo->tm_year+1900, timeInfo->tm_mon+1, timeInfo->tm_mday, timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
+  now_time = time(NULL);
+  timeinfo = localtime(&now_time);
+  sprintf(current_date, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
  
-  root["start_time"] = CurrentDate;
-  root["dev_id"] = DeviceID;
+  root["start_time"] = current_date;
+  root["dev_id"] = device_ID;
 
+  serializeJson(root,Serial);
+  Serial.println(" ");
   serializeJson(root, start_buffer, sizeof(start_buffer));
-  int postCode = client.POST((uint8_t *) start_buffer, strlen(start_buffer));
-
+  int postcode = client.POST((uint8_t *) start_buffer, strlen(start_buffer));
+  
+  Serial.print("PostCode = ");
+  Serial.println(postcode);
+  
   String response = client.getString();
   StaticJsonDocument<200> doc;
   JsonObject object = doc.as<JsonObject>();
   deserializeJson(doc, response);
-  MeasurementID = doc["id"];
+  measurement_ID = doc["id"];
 
 }
 
@@ -28,14 +33,18 @@ void StartPost(){
 
 void EndPost(){
   DynamicJsonDocument root(400);
-  NowTime = time(NULL);
-  timeInfo = localtime(&NowTime);
-  sprintf(CurrentDate, "%04d-%02d-%02d %02d:%02d:%02d",timeInfo->tm_year+1900, timeInfo->tm_mon+1, timeInfo->tm_mday, timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
+  now_time = time(NULL);
+  timeinfo = localtime(&now_time);
+  sprintf(current_date, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
   
-  root["end_time"] = CurrentDate;
-  root["dev_id"] = DeviceID;
-  root["measurement_id"] = MeasurementID;
-  
+  root["end_time"] = current_date;
+  root["dev_id"] = device_ID;
+  root["measurement_id"] = measurement_ID;
+
+  serializeJson(root,Serial);
+  Serial.println(" ");
   serializeJson(root, end_buffer, sizeof(end_buffer));
-  int postCode = client.POST((uint8_t *) end_buffer, strlen(end_buffer));
+  int postcode = client.POST((uint8_t *) end_buffer, strlen(end_buffer));
+  Serial.print("PostCode = ");
+  Serial.println(postcode);
 }

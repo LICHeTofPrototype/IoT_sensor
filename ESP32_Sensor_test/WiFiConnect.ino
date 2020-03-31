@@ -6,22 +6,27 @@ void WiFiConnect(){
   while(1){
     WiFi.begin(ssid, password); 
     count = 0;
-
+    
+    if (WiFi.status() == WL_CONNECTED){
+      Serial.println("[!!!] Failed WiFiConnect");
+      Serial.println("      Try Again ...");
+    }
     while (WiFi.status() != WL_CONNECTED){
-
+      
       if(count == 5){
         break;
       }else if (count % 2 == 0){
-        digitalWrite(WiFiPin, LOW);
+        digitalWrite(wifi_pin, LOW);
       }else {
-        digitalWrite(WiFiPin, HIGH);
+        digitalWrite(wifi_pin, HIGH);
       }
       delay(1000);
       count += 1;
     }
 
     if (WiFi.status() == WL_CONNECTED){
-      digitalWrite(WiFiPin, HIGH);
+      Serial.println("[***] Success WiFiConnect");
+      digitalWrite(wifi_pin, HIGH);
       configTime( JST, 0, "ntp.nict.jp");
       break;
     }
@@ -32,5 +37,6 @@ void WiFiConnect(){
 
 void WiFiDisConnect() {
   WiFi.disconnect();
-  digitalWrite(WiFiPin, LOW);
+  Serial.println("[***] Success WiFiDisConnect");
+  digitalWrite(wifi_pin, LOW);
 }
