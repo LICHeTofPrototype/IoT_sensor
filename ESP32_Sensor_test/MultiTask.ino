@@ -1,8 +1,8 @@
 
 void TaskSave(void* param) {
-  CreateJson("TaskSave");
+  SaveBeatData("TaskSave");
 }
 
-void TaskPost(void* param) {
-  PostBeat("TaskPost");
-}
+//void TaskPost(void* param) {
+//  PostBeat("TaskPost");
+//}
