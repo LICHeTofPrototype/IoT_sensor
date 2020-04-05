@@ -34,7 +34,6 @@ void WiFiConnect(){
      
 }
 
-
 void WiFiDisConnect() {
   WiFi.disconnect();
   Serial.println("[***] Success WiFiDisConnect");

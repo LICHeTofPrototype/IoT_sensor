@@ -5,17 +5,17 @@ char start_buffer[128];
 char end_buffer[128];
 
 void StartPost(){
-  DynamicJsonDocument root(400);
+  DynamicJsonDocument start_obj(400);
   now_time = time(NULL);
   timeinfo = localtime(&now_time);
   sprintf(current_date, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
  
-  root["start_time"] = current_date;
-  root["dev_id"] = device_ID;
+  start_obj["start_time"] = current_date;
+  start_obj["dev_id"] = device_ID;
 
-  serializeJson(root,Serial);
+  serializeJson(start_obj,Serial);
   Serial.println(" ");
-  serializeJson(root, start_buffer, sizeof(start_buffer));
+  serializeJson(start_obj, start_buffer, sizeof(start_buffer));
   int postcode = client.POST((uint8_t *) start_buffer, strlen(start_buffer));
   
   Serial.print("PostCode = ");
@@ -29,21 +29,19 @@ void StartPost(){
 
 }
 
-
-
 void EndPost(){
-  DynamicJsonDocument root(400);
+  DynamicJsonDocument end_obj(400);
   now_time = time(NULL);
   timeinfo = localtime(&now_time);
   sprintf(current_date, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
   
-  root["end_time"] = current_date;
-  root["dev_id"] = device_ID;
-  root["measurement_id"] = measurement_ID;
+  end_obj["end_time"] = current_date;
+  end_obj["dev_id"] = device_ID;
+  end_obj["measurement_id"] = measurement_ID;
 
-  serializeJson(root,Serial);
+  serializeJson(end_obj,Serial);
   Serial.println(" ");
-  serializeJson(root, end_buffer, sizeof(end_buffer));
+  serializeJson(end_obj, end_buffer, sizeof(end_buffer));
   int postcode = client.POST((uint8_t *) end_buffer, strlen(end_buffer));
   Serial.print("PostCode = ");
   Serial.println(postcode);

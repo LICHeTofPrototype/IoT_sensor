@@ -3,8 +3,8 @@
 // CalcDataAPIをコールするためのHttpRequest
 void HttpConnect(){
   client.begin(url);
-  Serial.print("[***] Success HttpConnect url: ");
-  Serial.println(url);
+  //Serial.print("[***] Success HttpConnect url: ");
+  //Serial.println(url);
   client.addHeader("Content-Type", "application/json");
 }
 // MeasurementStartAPIをコールするためのHttpRequest
