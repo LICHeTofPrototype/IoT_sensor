@@ -19,7 +19,7 @@ int beat_num_out;
 boolean que;
 
 
-void CreateJson(char* task){
+void SaveBeatData(char* task){
   
   Serial.println("[ON ] Start CreateJson");
   now_time = time(NULL);
