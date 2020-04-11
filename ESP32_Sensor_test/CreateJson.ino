@@ -2,7 +2,7 @@
 #include <ArduinoJson.h>
 
 //***********************************
-int time_interval = 10;  //測定間隔(ms)
+int time_interval = 1000;  //測定間隔(ms)
 const int array_num = 2000;  //配列に入れる要素数
 //***********************************
 
@@ -46,8 +46,10 @@ void SaveBeatData(char* task){
     beat_array[k] = signal;
     signal_pre = signal;
     k += 1;
+    Serial.print("k = ");
+    Serial.println(k); 
     vTaskDelay(time_interval);
-   
+    
 
     int sensor_power = digitalRead(onoff_pin);
     if (sensor_power == LOW){
