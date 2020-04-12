@@ -33,7 +33,7 @@ volatile int signal_pre =1800;
 //*********************************************
 const char* ssid = "elecom-58179b";
 const char* password = "cmp574fn3em4";
-const String host ="192.168.2.119";
+const String host ="192.168.2.105";
 #define port 8000
 int device_ID = 92407;
 //*********************************************
@@ -94,8 +94,8 @@ void loop() {
     if (sensor_power == HIGH){
       Serial.println("[ON ] Start MultiTask");
       
-      xTaskCreatePinnedToCore(TaskSave, "tasksave", 4096, NULL, 1, NULL, 0);
-      xTaskCreatePinnedToCore(TaskPost, "taskpost", 4096, NULL, 1, NULL, 1);
+      xTaskCreatePinnedToCore(TaskSave, "tasksave", 4096, NULL, 2, NULL, 1);
+      xTaskCreatePinnedToCore(TaskPost, "taskpost", 4096, NULL, 2, NULL, 0);
 
       while(sensor_power == HIGH){
         
