@@ -11,23 +11,12 @@ volatile int beat_count = 0;
 int last_beat_count = 0;
 int tmp_beat_count = 0;
 int beat_num_count = 0;
-//boolean que;
      
 void SaveBeatData(char* task){
-  Serial.println("[ON ] Start CreateJson");
   for (int i = 0; i < 3000; i++ ) {
         beat_array[i] = 0;
   }
   while(1){
-//    if (que == true){
-//      int beat_array[3000];
-//      now_time = time(NULL);
-//      timeinfo = localtime(&now_time);
-//      sprintf(current_time, "%02d:%02d:%02d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-//      root["time"] = current_time;
-//      que = false;
-//      k = 0;
-//    }
     signal = 0.8 * signal_pre + 0.2 * analogRead(sensor_pin); 
     if(beat_count < 3000){
       beat_array[beat_count] = signal;
@@ -40,18 +29,10 @@ void SaveBeatData(char* task){
       signal_pre = signal;
       beat_count += 1;
     }
-    //Serial.print("beat_count = ");
-    //Serial.println(beat_count); 
     int sensor_power = digitalRead(onoff_pin);
     if (sensor_power == LOW){
       break;
     }
-//    Serial.print("beat_count = ");
-//    Serial.println(beat_count);
-//    Serial.print("beat_array = ");
-//    Serial.println(beat_array[beat_count-1]);
-//    Serial.print("signal = ");
-//    Serial.println(signal);
     delay(time_interval);
   }
 }
@@ -61,7 +42,6 @@ void PostBeat(char* task){
     int sensor_power = digitalRead(onoff_pin);
     delay(1000);  
     if (sensor_power == HIGH ){
-      Serial.println("[ON ] Start PostBeat");
       tmp_beat_count = beat_count;
       //beat_countが前回のpostの時と比較して3000を超えていない場合
       if (tmp_beat_count > last_beat_count){
@@ -71,35 +51,21 @@ void PostBeat(char* task){
           JsonArray Beat = root.createNestedArray("beat");
           now_time = time(NULL);
           timeinfo = localtime(&now_time);
-          sprintf(current_time, "%02d:%02d:%02d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+          sprintf(current_time, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
           root["time"] = current_time;
           root["dev_id"] = device_ID;
           root["measurement_id"] = measurement_ID;
           for(int i=0; i <= beat_num_count; i++){
             root["beat"].add(*(beat_array+i));
           }
-          Serial.println("*************************************");
-          serializeJson(root,Serial);
-          Serial.println(" "); 
           serializeJson(root, buffer, sizeof(buffer));
           HttpConnect();
           int postcode = client.POST((uint8_t *) buffer, strlen(buffer));
-          Serial.print("PostCode = ");
-          Serial.println(postcode);
-          Serial.print("BufferSize = ");
-          Serial.println(strlen(buffer));
-          Serial.print("BeatNum = ");
-          Serial.println(beat_num_count);
-          Serial.print("tmp_beat_count = ");
-          Serial.println(tmp_beat_count);
-          Serial.print("last_beat_count = ");
-          Serial.println(last_beat_count);
           last_beat_count = tmp_beat_count;
           for (int i=0; i <= beat_num_count; i++){
             root["beat"].remove(i);
           }
           root.clear();
-          //root.delete();
         }
       }
       //beat_countが前回のpostの時と比較して3000を超えた場合
@@ -110,7 +76,7 @@ void PostBeat(char* task){
           JsonArray Beat = root.createNestedArray("beat");
           now_time = time(NULL);
           timeinfo = localtime(&now_time);
-          sprintf(current_time, "%02d:%02d:%02d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+          sprintf(current_time, "%04d-%02d-%02d %02d:%02d:%02d",timeinfo->tm_year+1900, timeinfo->tm_mon+1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
           root["time"] = current_time;
           root["dev_id"] = device_ID;
           root["measurement_id"] = measurement_ID;
@@ -122,35 +88,18 @@ void PostBeat(char* task){
               root["beat"].add(*(beat_array+i+last_beat_count-3000));
             }
           }
-          Serial.println("*************************************");
-          serializeJson(root,Serial);
-          Serial.println(" "); 
           serializeJson(root, buffer, sizeof(buffer));
           HttpConnect();
           int postcode = client.POST((uint8_t *) buffer, strlen(buffer));
-          Serial.print("PostCode = ");
-          Serial.println(postcode);
-          Serial.print("BufferSize = ");
-          Serial.println(strlen(buffer));
-          Serial.print("BeatNum = ");
-          Serial.println(beat_num_count);
-          Serial.print("tmp_beat_count = ");
-          Serial.println(tmp_beat_count);
-          Serial.print("last_beat_count = ");
-          Serial.println(last_beat_count);
           last_beat_count = tmp_beat_count;
           for (int i=0; i <= beat_num_count; i++){
             root["beat"].remove(i);
           }
           root.clear();
-          //root.delete();
         }
       }
     } 
     else if (sensor_power == LOW){
-      HttpDisConnect();
-      HttpConnectEnd();
-      EndPost();
       break;
     }
   }

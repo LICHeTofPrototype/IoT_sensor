@@ -17,7 +17,6 @@ volatile int calibration = 0;
 
 String url = "";
 String url_start = "";
-String url_end = "";
 
 time_t now_time;
 struct tm *timeinfo;  //時刻を格納するオブジェクト
@@ -27,7 +26,6 @@ char current_date[30];
 volatile int measurement_ID;
 volatile int signal;
 volatile int signal_pre =1800;
-
 
 //[Wi-Fi環境・サーバ]が変更される場合は以下を変更
 //*********************************************
@@ -52,14 +50,11 @@ void setup() {
   url += ":";
   url += port;
   url += "/v1/api";
-
   url_start = url + "/measurement/start/";
-  url_end = url + "/measurement/end/";
   url += "/calc_data/";
-
-  
   WiFiDisConnect();
   WiFiConnect();
+  
 }
 
 void loop() {
