@@ -56,7 +56,7 @@ void PostBeat(char* task){
           root["dev_id"] = device_ID;
           root["measurement_id"] = measurement_ID;
           for(int i=0; i <= beat_num_count; i++){
-            root["beat"].add(*(beat_array+i));
+            root["beat"].add(*(beat_array+last_beat_count+i));
           }
           serializeJson(root, buffer, sizeof(buffer));
           HttpConnect();
