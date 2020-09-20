@@ -16,6 +16,17 @@ https://www.arduino.cc/en/main/software
 * Library to install  
 ArduinoJson ( by Benoit Blanchon) 6.14  
 
+* Library(esp32) to install  
+https://dl.espressif.com/dl/package_esp32_index.json
+
+## About Library(macOSの場合)
+* Arduino(IDE)を立ち上げたら以下の順にライブラリをインストール
+1. ( https://arduinojson.org/v6/doc/installation/ )これを参考にArduinoJsonをダウンロード
+1. Arduino(IDE)から左上メニューのArduino→Preferenceをクリック
+1. 環境設定画面が立ち上がるので「追加のボードマネージャのURL」に「 https://dl.espressif.com/dl/package_esp32_index.json 」を入力してOK
+1. 左上メニューからツール→ボード"Arduino Uno"→ボードマネージャを選択
+1. 検索窓で「esp32」を入力→インストール
+
 ## About Code  
 ### ESP_Sensor.ino  
 <code>void setup()</code>  
